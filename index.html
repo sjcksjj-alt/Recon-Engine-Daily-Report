@@ -8,166 +8,192 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-body{background:#f0f2f5;color:#1a1a2e;font-family:'Segoe UI',sans-serif;font-size:12px;padding:12px;}
-#sync_banner{position:fixed;top:0;left:0;right:0;z-index:9999;padding:7px 14px;font-size:11px;font-weight:700;text-align:center;display:none;}
-#sync_banner.saving{display:block;background:#fef3c7;color:#92400e;}
-#sync_banner.saved{display:block;background:#d1fae5;color:#065f46;}
-#sync_banner.error{display:block;background:#fee2e2;color:#991b1b;}
-
-/* ── Setup overlay ── */
-.setup-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(15,23,42,0.88);z-index:10000;display:flex;align-items:center;justify-content:center;}
-.setup-box{background:#fff;border-radius:14px;padding:28px 30px;max-width:480px;width:96%;box-shadow:0 24px 60px rgba(0,0,0,0.3);}
-.setup-box h2{font-size:16px;font-weight:800;color:#1a1a2e;margin-bottom:6px;}
-.setup-box p{font-size:11px;color:#64748b;line-height:1.7;margin-bottom:14px;}
-.setup-steps{background:#f8fafc;border-radius:8px;padding:12px 14px;margin-bottom:16px;font-size:10px;color:#374151;line-height:2;}
-.setup-steps b{color:#2563eb;}
-.setup-steps a{color:#2563eb;}
-.setup-box label{font-size:9px;font-weight:700;color:#374151;display:block;margin-bottom:3px;text-transform:uppercase;letter-spacing:.4px;}
-.setup-box input{width:100%;border:1.5px solid #e2e8f0;border-radius:7px;padding:9px 12px;font-size:12px;color:#1a1a2e;outline:none;margin-bottom:10px;font-family:monospace;}
-.setup-box input:focus{border-color:#2563eb;}
-.btn-connect{width:100%;padding:11px;background:#2563eb;border:none;border-radius:8px;color:#fff;font-size:13px;font-weight:700;cursor:pointer;margin-top:2px;}
-.btn-connect:hover{background:#1d4ed8;}
-.setup-note{font-size:9px;color:#94a3b8;margin-top:10px;line-height:1.6;text-align:center;}
-
+body{background:#f0f2f5;color:#1a1a2e;font-family:'Segoe UI',sans-serif;font-size:12px;padding:12px;font-weight:700;}
 .header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;background:#fff;border-radius:10px;padding:10px 16px;border:1px solid #e2e8f0;box-shadow:0 1px 4px rgba(0,0,0,0.06);}
-.header-left h1{font-size:15px;font-weight:700;color:#1a1a2e;}
-.header-left .subtitle{font-size:10px;color:#94a3b8;margin-top:1px;}
-.header-right{display:flex;align-items:center;gap:10px;}
-#db_status{font-size:9px;color:#94a3b8;font-weight:600;}
+.header-left h1{font-size:15px;font-weight:800;color:#1a1a2e;}
+.header-left .subtitle{font-size:10px;color:#94a3b8;margin-top:1px;font-weight:700;}
 .tab-btns{display:flex;gap:6px;}
-.tab-btn{padding:5px 18px;border-radius:6px;border:1.5px solid #cbd5e1;background:#f8fafc;color:#64748b;cursor:pointer;font-size:11px;font-weight:600;transition:all 0.15s;}
+.tab-btn{padding:5px 18px;border-radius:6px;border:1.5px solid #cbd5e1;background:#f8fafc;color:#64748b;cursor:pointer;font-size:11px;font-weight:700;transition:all 0.15s;}
 .tab-btn.h-active{background:#1e3a5f;border-color:#2563eb;color:#fff;}
 .tab-btn.p-active{background:#064e3b;border-color:#10b981;color:#fff;}
 .top-row{display:grid;grid-template-columns:320px 1fr 1fr;gap:10px;margin-bottom:10px;}
 .cal-card{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:12px;box-shadow:0 1px 4px rgba(0,0,0,0.05);}
 .cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
-.cal-month{font-size:13px;font-weight:700;color:#1a1a2e;}
+.cal-month{font-size:13px;font-weight:800;color:#1a1a2e;}
 .cal-nav{display:flex;gap:4px;align-items:center;}
-.cal-btn{background:#f1f5f9;border:1px solid #e2e8f0;color:#64748b;border-radius:5px;padding:2px 8px;cursor:pointer;font-size:12px;line-height:1.4;}
-.cal-btn:hover{background:#e2e8f0;}
+.cal-btn{background:#f1f5f9;border:1px solid #e2e8f0;color:#64748b;border-radius:5px;padding:2px 8px;cursor:pointer;font-size:12px;line-height:1.4;font-weight:700;}
+.cal-btn:hover{background:#e2e8f0;color:#1a1a2e;}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;}
-.cal-day-name{text-align:center;font-size:9px;color:#94a3b8;padding:2px 0;font-weight:600;}
-.cal-day{text-align:center;padding:3px 0;border-radius:5px;font-size:11px;font-weight:600;cursor:pointer;border:1.5px solid transparent;min-height:22px;display:flex;align-items:center;justify-content:center;transition:all 0.1s;color:#374151;}
+.cal-day-name{text-align:center;font-size:9px;color:#94a3b8;padding:2px 0;font-weight:800;}
+.cal-day{text-align:center;padding:3px 0;border-radius:5px;font-size:11px;font-weight:700;cursor:pointer;border:1.5px solid transparent;min-height:22px;display:flex;align-items:center;justify-content:center;transition:all 0.1s;color:#374151;}
 .cal-day.empty{cursor:default;}
 .cal-day.today{border-color:#2563eb;color:#2563eb;background:#eff6ff;}
 .cal-day.has-data{background:#d1fae5;border-color:#10b981;color:#059669;}
 .cal-day.selected{background:#dbeafe;border-color:#2563eb;color:#1d4ed8;}
 .cal-day:not(.empty):hover{background:#f1f5f9;border-color:#cbd5e1;}
 .entry-card{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:12px;box-shadow:0 1px 4px rgba(0,0,0,0.05);}
-.card-title{font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;}
-.selected-date-label{font-size:12px;font-weight:700;color:#1a1a2e;margin-bottom:8px;}
+.card-title{font-size:10px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;}
+.selected-date-label{font-size:12px;font-weight:800;color:#1a1a2e;margin-bottom:8px;}
 .field-group{margin-bottom:7px;}
-.field-group label{display:block;font-size:9px;color:#94a3b8;margin-bottom:3px;font-weight:600;text-transform:uppercase;letter-spacing:0.3px;}
-.field-group input{width:100%;background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:6px;padding:7px 10px;color:#1a1a2e;font-size:13px;font-weight:700;outline:none;transition:border-color 0.15s;}
+.field-group label{display:block;font-size:9px;color:#64748b;margin-bottom:3px;font-weight:800;text-transform:uppercase;letter-spacing:0.3px;}
+.field-group input{width:100%;background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:6px;padding:7px 10px;color:#1a1a2e;font-size:13px;font-weight:800;outline:none;transition:border-color 0.15s;}
 .field-group input:focus{border-color:#2563eb;background:#fff;}
-.btn-save{width:100%;padding:8px;background:#2563eb;border:none;border-radius:7px;color:#fff;font-size:12px;font-weight:700;cursor:pointer;transition:background 0.15s;margin-top:4px;}
+.btn-save{width:100%;padding:8px;background:#2563eb;border:none;border-radius:7px;color:#fff;font-size:12px;font-weight:800;cursor:pointer;transition:background 0.15s;margin-top:4px;}
 .btn-save:hover{background:#1d4ed8;}
-.btn-save:disabled{background:#93c5fd;cursor:not-allowed;}
+.btn-save:disabled{background:#94a3b8;cursor:not-allowed;}
 .changelog{background:#f8fafc;border:1px solid #e2e8f0;border-radius:5px;padding:6px;max-height:65px;overflow-y:auto;margin-top:6px;}
-.cl-title{color:#f59e0b;font-size:8px;font-weight:700;margin-bottom:3px;}
-.cl-time{color:#3b82f6;font-size:8px;}
-.cl-change{font-size:9px;color:#374151;}
+.cl-title{color:#f59e0b;font-size:8px;font-weight:800;margin-bottom:3px;}
+.cl-time{color:#3b82f6;font-size:8px;font-weight:700;}
+.cl-change{font-size:9px;color:#374151;font-weight:700;}
 .summary-card{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:12px;box-shadow:0 1px 4px rgba(0,0,0,0.05);}
 .summary-title-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
-.summary-title{font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;}
-.badge{background:#2563eb;border-radius:4px;padding:2px 8px;font-size:9px;color:#fff;font-weight:700;}
+.summary-title{font-size:10px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;}
+.badge{background:#2563eb;border-radius:4px;padding:2px 8px;font-size:9px;color:#fff;font-weight:800;}
 .s-row{display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid #f1f5f9;}
 .s-row:last-child{border-bottom:none;}
-.s-label{font-size:9px;color:#64748b;display:flex;align-items:center;gap:5px;}
+.s-label{font-size:9px;color:#64748b;display:flex;align-items:center;gap:5px;font-weight:700;}
 .s-dot{width:7px;height:7px;border-radius:2px;flex-shrink:0;}
-.s-val{font-size:12px;font-weight:700;font-family:'Courier New',monospace;}
+.s-val{font-size:12px;font-weight:800;font-family:'Courier New',monospace;}
 .summary-bar{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:10px 14px;margin-bottom:10px;box-shadow:0 1px 4px rgba(0,0,0,0.05);}
-.summary-bar-title{font-size:10px;font-weight:700;color:#64748b;margin-bottom:7px;text-transform:uppercase;letter-spacing:0.5px;}
+.summary-bar-title{font-size:10px;font-weight:800;color:#64748b;margin-bottom:7px;text-transform:uppercase;letter-spacing:0.5px;}
 .legend-flex{display:flex;gap:16px;flex-wrap:wrap;align-items:center;}
 .legend-item{display:flex;align-items:center;gap:5px;}
 .leg-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0;}
-.leg-label{font-size:9px;color:#64748b;}
-.leg-val{font-size:11px;font-weight:700;font-family:'Courier New',monospace;margin-left:2px;}
+.leg-label{font-size:9px;color:#64748b;font-weight:700;}
+.leg-val{font-size:11px;font-weight:800;font-family:'Courier New',monospace;margin-left:2px;}
 .charts-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px;}
 .chart-card{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:12px;box-shadow:0 1px 4px rgba(0,0,0,0.05);}
-.chart-title{font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;}
+.chart-title{font-size:10px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;}
 .bottom-charts-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px;}
 .bottom-chart-card{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:12px;box-shadow:0 1px 4px rgba(0,0,0,0.05);}
-.bottom-chart-title{font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;}
+.bottom-chart-title{font-size:10px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;}
 .dual-chart-labels{display:flex;justify-content:space-between;margin-bottom:4px;}
-.dual-label{font-size:9px;font-weight:700;padding:1px 7px;border-radius:4px;}
+.dual-label{font-size:9px;font-weight:800;padding:1px 7px;border-radius:4px;}
 .dual-label.h{background:#dbeafe;color:#1d4ed8;}
 .dual-label.p{background:#d1fae5;color:#059669;}
 .dual-chart-wrap{display:grid;grid-template-columns:1fr 1fr;gap:4px;}
 .dual-chart-wrap canvas{width:100%!important;}
 .monthly-card{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:12px;margin-bottom:10px;box-shadow:0 1px 4px rgba(0,0,0,0.05);}
-.monthly-title{font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:7px;}
+.monthly-title{font-size:10px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:7px;}
 .monthly-table{width:100%;border-collapse:collapse;font-size:10px;}
-.monthly-table th{text-align:left;padding:4px 8px;font-size:9px;color:#94a3b8;border-bottom:1.5px solid #e2e8f0;font-weight:600;}
-.monthly-table td{padding:4px 8px;border-bottom:1px solid #f1f5f9;font-family:'Courier New',monospace;}
+.monthly-table th{text-align:left;padding:4px 8px;font-size:9px;color:#64748b;border-bottom:1.5px solid #e2e8f0;font-weight:800;}
+.monthly-table td{padding:4px 8px;border-bottom:1px solid #f1f5f9;font-family:'Courier New',monospace;font-weight:700;}
 .monthly-table tr:last-child td{border-bottom:none;}
 .monthly-table tr:hover td{background:#f8fafc;}
-.actions-row{display:flex;gap:10px;margin-bottom:10px;justify-content:center;flex-wrap:wrap;}
-.btn-action{padding:10px 24px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;border:none;transition:all 0.15s;}
+.actions-row{display:flex;gap:10px;margin-bottom:10px;justify-content:center;}
+.btn-action{padding:10px 28px;border-radius:8px;font-size:12px;font-weight:800;cursor:pointer;border:none;transition:all 0.15s;}
 .btn-view{background:#1e3a5f;color:#fff;}
 .btn-view:hover{background:#2563eb;}
 .btn-excel{background:#064e3b;color:#fff;}
 .btn-excel:hover{background:#10b981;}
-.btn-settings{background:#f1f5f9;color:#374151;border:1.5px solid #e2e8f0;}
-.btn-settings:hover{background:#e2e8f0;}
 .share-card{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:12px;box-shadow:0 1px 4px rgba(0,0,0,0.05);}
-.share-title{font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:7px;}
-.share-preview{background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:10px;font-family:'Courier New',monospace;font-size:10px;color:#374151;line-height:1.7;margin-bottom:8px;white-space:pre-wrap;max-height:160px;overflow-y:auto;}
+.share-title{font-size:10px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:7px;}
+.share-preview{background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:10px;font-family:'Courier New',monospace;font-size:10px;color:#374151;line-height:1.7;margin-bottom:8px;white-space:pre-wrap;max-height:160px;overflow-y:auto;font-weight:700;}
 .share-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-.btn-wa{padding:9px;background:#064e3b;border:1.5px solid #10b981;border-radius:7px;color:#10b981;font-size:12px;font-weight:700;cursor:pointer;text-align:center;transition:all 0.15s;}
+.btn-wa{padding:9px;background:#064e3b;border:1.5px solid #10b981;border-radius:7px;color:#10b981;font-size:12px;font-weight:800;cursor:pointer;text-align:center;transition:all 0.15s;}
 .btn-wa:hover{background:#10b981;color:#fff;}
-.btn-email{padding:9px;background:#dbeafe;border:1.5px solid #2563eb;border-radius:7px;color:#1d4ed8;font-size:12px;font-weight:700;cursor:pointer;text-align:center;transition:all 0.15s;}
+.btn-email{padding:9px;background:#dbeafe;border:1.5px solid #2563eb;border-radius:7px;color:#1d4ed8;font-size:12px;font-weight:800;cursor:pointer;text-align:center;transition:all 0.15s;}
 .btn-email:hover{background:#2563eb;color:#fff;}
 .modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:1000;align-items:center;justify-content:center;}
 .modal-overlay.show{display:flex;}
 .modal{background:#fff;border-radius:12px;padding:20px;max-width:700px;width:95%;max-height:80vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.2);}
 .modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid #e2e8f0;}
-.modal-title{font-size:14px;font-weight:700;color:#1a1a2e;}
-.modal-close{background:#f1f5f9;border:none;border-radius:6px;padding:4px 10px;cursor:pointer;font-size:14px;color:#64748b;}
+.modal-title{font-size:14px;font-weight:800;color:#1a1a2e;}
+.modal-close{background:#f1f5f9;border:none;border-radius:6px;padding:4px 10px;cursor:pointer;font-size:14px;color:#64748b;font-weight:700;}
 .modal-close:hover{background:#e2e8f0;}
 .modal-table{width:100%;border-collapse:collapse;font-size:11px;}
-.modal-table th{text-align:left;padding:6px 8px;font-size:9px;color:#94a3b8;border-bottom:1.5px solid #e2e8f0;font-weight:600;background:#f8fafc;}
-.modal-table td{padding:5px 8px;border-bottom:1px solid #f1f5f9;font-family:'Courier New',monospace;}
+.modal-table th{text-align:left;padding:6px 8px;font-size:9px;color:#64748b;border-bottom:1.5px solid #e2e8f0;font-weight:800;background:#f8fafc;}
+.modal-table td{padding:5px 8px;border-bottom:1px solid #f1f5f9;font-family:'Courier New',monospace;font-weight:700;}
 .modal-table tr:last-child td{border-bottom:none;}
 .modal-table tr:hover td{background:#f8fafc;}
-.modal-section{font-size:10px;font-weight:700;color:#2563eb;background:#eff6ff;padding:5px 8px;border-radius:5px;margin:10px 0 5px;}
+.modal-section{font-size:10px;font-weight:800;color:#2563eb;background:#eff6ff;padding:5px 8px;border-radius:5px;margin:10px 0 5px;}
 canvas{max-height:90px;}
+/* SYNC BANNER */
+.sync-bar{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:8px 14px;margin-bottom:10px;display:flex;align-items:center;gap:10px;box-shadow:0 1px 4px rgba(0,0,0,0.05);flex-wrap:wrap;}
+.sync-label{font-size:10px;font-weight:800;color:#64748b;text-transform:uppercase;}
+.sync-dot{width:8px;height:8px;border-radius:50%;background:#10b981;flex-shrink:0;}
+.sync-dot.warn{background:#f59e0b;}
+.sync-dot.err{background:#ef4444;}
+.sync-msg{font-size:10px;font-weight:700;color:#374151;flex:1;}
+.sync-btn{padding:4px 12px;border-radius:5px;border:1.5px solid #2563eb;background:#eff6ff;color:#2563eb;font-size:10px;font-weight:800;cursor:pointer;}
+.sync-btn:hover{background:#2563eb;color:#fff;}
+.setup-box{background:#fffbeb;border:1.5px solid #f59e0b;border-radius:10px;padding:14px;margin-bottom:10px;}
+.setup-box h3{font-size:12px;font-weight:800;color:#92400e;margin-bottom:8px;}
+.setup-box p{font-size:10px;color:#78350f;font-weight:700;margin-bottom:6px;line-height:1.6;}
+.setup-box input{width:100%;background:#fff;border:1.5px solid #f59e0b;border-radius:6px;padding:7px 10px;color:#1a1a2e;font-size:11px;font-weight:700;outline:none;margin-bottom:6px;}
+.setup-box .btn-connect{padding:7px 20px;background:#f59e0b;border:none;border-radius:6px;color:#fff;font-size:11px;font-weight:800;cursor:pointer;}
+.setup-box .btn-connect:hover{background:#d97706;}
+.setup-box .btn-skip{padding:7px 14px;background:#f1f5f9;border:none;border-radius:6px;color:#64748b;font-size:11px;font-weight:700;cursor:pointer;margin-left:6px;}
+.toast{position:fixed;bottom:20px;right:20px;background:#1e3a5f;color:#fff;padding:10px 18px;border-radius:8px;font-size:12px;font-weight:800;z-index:9999;opacity:0;transition:opacity 0.3s;pointer-events:none;}
+.toast.show{opacity:1;}
 </style>
 </head>
 <body>
 
-<div id="sync_banner"></div>
-
-<!-- Setup overlay -->
-<div class="setup-overlay" id="setup_overlay" style="display:none;">
-  <div class="setup-box">
-    <h2>🔗 JSONBin Setup — One Time Only</h2>
-    <p>உங்கள் data எல்லாரும் பார்க்க, ஒரு free JSONBin account வேணும். 2 நிமிஷம் மட்டும்!</p>
-    <div class="setup-steps">
-      <b>Step 1:</b> <a href="https://jsonbin.io" target="_blank">jsonbin.io</a> → Sign up (free, email போதும்)<br>
-      <b>Step 2:</b> Login → Top right → <b>API Keys</b> → <b>Secret Key</b> copy பண்ணு<br>
-      <b>Step 3:</b> அந்த key இங்க paste பண்ணு → Connect பண்ணு<br>
-      <b>Step 4:</b> Done! எல்லாரும் same data பார்ப்பாங்க 🎉
-    </div>
-    <label>JSONBin Secret Key (starts with $2b$...)</label>
-    <input id="jb_key" placeholder="$2b$10$..." autocomplete="off"/>
-    <button class="btn-connect" onclick="connectJSONBin()">🔗 Connect & Start</button>
-    <div class="setup-note">உங்கள் key இந்த browser's localStorage ல மட்டும் save ஆகும். JSONBin free plan: 10,000 requests/month — போதும்.</div>
-  </div>
+<!-- SETUP BOX: shown only until Google Sheet is configured -->
+<div class="setup-box" id="setup_box">
+  <h3>&#9881; One-Time Setup — Cross-Device Shared Data</h3>
+  <p>&#128161; இந்த tool-ல data எல்லா device-லயும் share ஆக <strong>Google Sheets</strong> use பண்றோம் (free).<br>
+  Step 1: <a href="https://sheets.new" target="_blank" style="color:#2563eb">sheets.new</a> &rarr; new sheet create பண்ணு<br>
+  Step 2: <strong>Extensions &rarr; Apps Script</strong> &rarr; கீழே உள்ள script paste பண்ணு &rarr; Deploy &rarr; Web App &rarr; "Anyone" access &rarr; URL copy பண்ணு<br>
+  Step 3: அந்த URL இங்கே paste பண்ணு:</p>
+  <pre style="background:#fff3cd;border:1px solid #f59e0b;border-radius:5px;padding:8px;font-size:9px;margin-bottom:8px;overflow-x:auto;white-space:pre-wrap;">function doPost(e){
+  var ss=SpreadsheetApp.getActiveSpreadsheet();
+  var d=JSON.parse(e.postData.contents);
+  var sh=ss.getSheetByName(d.tab)||ss.insertSheet(d.tab);
+  // Add header row if sheet is new
+  if(sh.getLastRow()===0){sh.appendRow(['Date','Core Receipt','Inv Received','Inv Dispatched']);}
+  var rows=sh.getDataRange().getValues();
+  var found=false;
+  for(var i=1;i&lt;rows.length;i++){
+    // Compare as string — date stored as YYYY-MM-DD text
+    if(String(rows[i][0])===String(d.date)){
+      sh.getRange(i+1,1,1,4).setValues([[d.date,d.core,d.inv_r,d.inv_d]]);
+      found=true;break;
+    }
+  }
+  if(!found)sh.appendRow([d.date,d.core,d.inv_r,d.inv_d]);
+  return ContentService.createTextOutput("ok");
+}
+function doGet(e){
+  var ss=SpreadsheetApp.getActiveSpreadsheet();
+  var result={H:{},P15:{}};
+  ['H','P15'].forEach(function(tab){
+    var sh=ss.getSheetByName(tab);
+    if(!sh)return;
+    var rows=sh.getDataRange().getValues();
+    for(var i=1;i&lt;rows.length;i++){
+      var dateVal=String(rows[i][0]).trim();
+      // Accept only YYYY-MM-DD format keys
+      if(/^\d{4}-\d{2}-\d{2}$/.test(dateVal)){
+        result[tab][dateVal]={core:Number(rows[i][1])||0,inv_r:Number(rows[i][2])||0,inv_d:Number(rows[i][3])||0,ts:new Date().toISOString(),log:[]};
+      }
+    }
+  });
+  return ContentService.createTextOutput(JSON.stringify(result)).setMimeType(ContentService.MimeType.JSON);
+}</pre>
+  <input type="text" id="sheet_url_input" placeholder="https://script.google.com/macros/s/AKfy.../exec"/>
+  <button class="btn-connect" onclick="connectSheet()">&#128279; Connect &amp; Sync</button>
+  <button class="btn-skip" onclick="skipSetup()">&#128462; Use Local Only</button>
 </div>
 
 <div class="header">
   <div class="header-left">
-    <h1>Recon Engine Daily Report</h1>
+    <h1>&#128200; Recon Engine Daily Report</h1>
     <div class="subtitle" id="report_subtitle"></div>
   </div>
-  <div class="header-right">
-    <div id="db_status">⏳ Loading…</div>
-    <div class="tab-btns">
-      <div class="tab-btn h-active" id="tab_H" onclick="switchTab('H')">H Recon</div>
-      <div class="tab-btn" id="tab_P15" onclick="switchTab('P15')">P15 Recon</div>
-    </div>
+  <div class="tab-btns">
+    <div class="tab-btn h-active" id="tab_H" onclick="switchTab('H')">H Recon</div>
+    <div class="tab-btn" id="tab_P15" onclick="switchTab('P15')">P15 Recon</div>
   </div>
+</div>
+
+<div class="sync-bar">
+  <div class="sync-dot" id="sync_dot"></div>
+  <span class="sync-label">Sync:</span>
+  <span class="sync-msg" id="sync_msg">Checking...</span>
+  <button class="sync-btn" onclick="syncNow()">&#8635; Sync Now</button>
+  <button class="sync-btn" style="border-color:#ef4444;background:#fee2e2;color:#dc2626;" onclick="changeSheet()">&#9881; Change Sheet</button>
 </div>
 
 <div class="top-row">
@@ -175,33 +201,33 @@ canvas{max-height:90px;}
     <div class="cal-header">
       <div class="cal-month" id="cal_title"></div>
       <div class="cal-nav">
-        <button class="cal-btn" onclick="changeMonth(-1)">‹</button>
-        <button class="cal-btn" onclick="goToday()">•</button>
-        <button class="cal-btn" onclick="changeMonth(1)">›</button>
+        <button class="cal-btn" onclick="changeMonth(-1)">&#8249;</button>
+        <button class="cal-btn" onclick="goToday()">&#8226;</button>
+        <button class="cal-btn" onclick="changeMonth(1)">&#8250;</button>
       </div>
     </div>
     <div class="cal-grid" id="cal_grid"></div>
   </div>
   <div class="entry-card">
-    <div class="card-title">Select a Date</div>
-    <div class="selected-date-label" id="entry_title">—</div>
+    <div class="card-title">&#128204; Select a Date &amp; Enter Data</div>
+    <div class="selected-date-label" id="entry_title">&#8212;</div>
     <div class="field-group"><label>Core Receipt</label><input type="number" id="inp_core" placeholder="0" min="0"/></div>
     <div class="field-group"><label>Invoice Received</label><input type="number" id="inp_inv_r" placeholder="0" min="0"/></div>
     <div class="field-group"><label>Invoice Dispatched</label><input type="number" id="inp_inv_d" placeholder="0" min="0"/></div>
-    <button class="btn-save" id="btn_save" onclick="saveDay()">💾 Save</button>
+    <button class="btn-save" id="save_btn" onclick="saveDay()">&#128190; Save</button>
     <div id="modified_info"></div>
   </div>
   <div class="summary-card">
     <div class="summary-title-row">
       <div class="summary-title">Day Summary</div>
-      <span class="badge" id="summary_date_badge">—</span>
+      <span class="badge" id="summary_date_badge">&#8212;</span>
     </div>
-    <div id="day_summary_box"><div style="color:#94a3b8;font-size:10px;text-align:center;padding:20px;">Click a date to view</div></div>
+    <div id="day_summary_box"><div style="color:#94a3b8;font-size:10px;text-align:center;padding:20px;font-weight:700;">Click a date to view</div></div>
   </div>
 </div>
 
 <div class="summary-bar">
-  <div class="summary-bar-title">📊 Summary — <span id="legend_day_label">—</span></div>
+  <div class="summary-bar-title">&#128202; Summary &#8212; <span id="legend_day_label">&#8212;</span></div>
   <div class="legend-flex" id="legend_box"></div>
 </div>
 
@@ -213,333 +239,358 @@ canvas{max-height:90px;}
 
 <div class="bottom-charts-row">
   <div class="bottom-chart-card">
-    <div class="bottom-chart-title">📈 Inv &amp; Dispatch Cumulative</div>
+    <div class="bottom-chart-title">&#128200; Inv &amp; Dispatch Cumulative</div>
     <div class="dual-chart-labels"><span class="dual-label h">H Recon</span><span class="dual-label p">P15 Recon</span></div>
     <div class="dual-chart-wrap"><canvas id="h_cum_chart"></canvas><canvas id="p_cum_chart"></canvas></div>
   </div>
   <div class="bottom-chart-card">
-    <div class="bottom-chart-title">📊 Inv &amp; Dispatch Average</div>
+    <div class="bottom-chart-title">&#128202; Inv &amp; Dispatch Average</div>
     <div class="dual-chart-labels"><span class="dual-label h">H Recon</span><span class="dual-label p">P15 Recon</span></div>
     <div class="dual-chart-wrap"><canvas id="h_avg_chart"></canvas><canvas id="p_avg_chart"></canvas></div>
   </div>
   <div class="bottom-chart-card">
-    <div class="bottom-chart-title">💜 Core Average Receipt</div>
+    <div class="bottom-chart-title">&#128156; Core Average Receipt</div>
     <div class="dual-chart-labels"><span class="dual-label h">H Recon</span><span class="dual-label p">P15 Recon</span></div>
     <div class="dual-chart-wrap"><canvas id="h_coreavg_chart"></canvas><canvas id="p_coreavg_chart"></canvas></div>
   </div>
 </div>
 
 <div class="monthly-card">
-  <div class="monthly-title">📅 Monthly Summary</div>
+  <div class="monthly-title">&#128197; Monthly Summary</div>
   <div style="overflow-x:auto"><table class="monthly-table" id="monthly_table"></table></div>
 </div>
 
 <div class="actions-row">
-  <button class="btn-action btn-view" onclick="openAllData()">📄 View All Data</button>
-  <button class="btn-action btn-excel" onclick="exportExcel()">⬇ Download Excel (.xlsx)</button>
-  <button class="btn-action btn-settings" onclick="resetSetup()">⚙ Change API Key</button>
+  <button class="btn-action btn-view" onclick="openAllData()">&#128196; View All Data</button>
+  <button class="btn-action btn-excel" onclick="exportExcelInfo()">&#8659; Download Excel (.xlsx)</button>
 </div>
 
 <div class="share-card">
-  <div class="share-title">📤 Share Day Report</div>
+  <div class="share-title">&#128228; Share Day Report</div>
   <div class="share-preview" id="share_preview"></div>
   <div class="share-btns">
-    <div class="btn-wa" onclick="shareWA()">📱 WhatsApp</div>
-    <div class="btn-email" onclick="shareEmail()">📧 Email</div>
+    <div class="btn-wa" onclick="shareWA()">&#128241; WhatsApp</div>
+    <div class="btn-email" onclick="shareEmail()">&#128231; Email</div>
   </div>
 </div>
 
 <div class="modal-overlay" id="modal_overlay" onclick="closeModalOutside(event)">
   <div class="modal">
     <div class="modal-header">
-      <div class="modal-title">📄 All Data</div>
-      <button class="modal-close" onclick="closeModal()">✕ Close</button>
+      <div class="modal-title">&#128196; All Data</div>
+      <button class="modal-close" onclick="closeModal()">&#10005; Close</button>
     </div>
     <div id="modal_body"></div>
   </div>
 </div>
 
+<div class="toast" id="toast"></div>
+
 <script>
-/* ══════════════════════════════════════════
-   CONSTANTS & STATE
-══════════════════════════════════════════ */
+// ============================================================
+// STORAGE STRATEGY:
+// 1. localStorage  — always used as fast local cache
+// 2. Google Sheets — optional cross-device sync backend
+//    (user sets up once via Apps Script Web App)
+// ============================================================
+
 const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
 const MONTHS_SHORT=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-const JSONBIN_API='https://api.jsonbin.io/v3/b';
 
-let activeTab='H', today=new Date(),
-    viewYear=today.getFullYear(), viewMonth=today.getMonth(),
-    selectedDate='';
+let activeTab='H', today=new Date(), viewYear=today.getFullYear(), viewMonth=today.getMonth(), selectedDate='';
+let sheetUrl = localStorage.getItem('recon_sheet_url') || '';
+let isSyncing = false;
 
-// In-memory store — loaded from JSONBin
-const store={ H:{}, P15:{} };
-let BIN_ID=null, API_KEY=null;
+// Store: always loaded from localStorage first
+const store = {
+  H:  JSON.parse(localStorage.getItem('recon_v3_H')  || '{}'),
+  P15:JSON.parse(localStorage.getItem('recon_v3_P15') || '{}')
+};
 
-/* ══════════════════════════════════════════
-   JSONBIN HELPERS
-══════════════════════════════════════════ */
-function getConfig(){
-  try{ return JSON.parse(localStorage.getItem('recon_jb_cfg')||'null'); }
-  catch(e){ return null; }
+// ---- TOAST ----
+function toast(msg, col) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.background = col || '#1e3a5f';
+  t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); }, 2800);
 }
 
-async function connectJSONBin(){
-  const key=document.getElementById('jb_key').value.trim();
-  if(!key){ showBanner('error','⚠ Key பண்ணுங்க!'); return; }
-  API_KEY=key;
-  showBanner('saving','⏳ Testing connection & creating bin…',30000);
-  try{
-    // Create a new bin with empty data
-    const res=await fetch(JSONBIN_API,{
-      method:'POST',
-      headers:{'Content-Type':'application/json','X-Master-Key':key,'X-Bin-Name':'recon-engine-data','X-Collection-Name':'ReconEngine'},
-      body:JSON.stringify({H:{},P15:{}})
+// ---- SYNC STATUS UI ----
+function setSyncStatus(msg, state) {
+  // state: 'ok' | 'warn' | 'err' | 'loading'
+  var dot = document.getElementById('sync_dot');
+  var txt = document.getElementById('sync_msg');
+  txt.textContent = msg;
+  dot.className = 'sync-dot' + (state === 'ok' ? '' : state === 'warn' ? ' warn' : ' err');
+}
+
+// ---- SETUP BOX ----
+function connectSheet() {
+  var url = document.getElementById('sheet_url_input').value.trim();
+  if (!url || !url.startsWith('https://script.google.com')) {
+    toast('Invalid URL — paste the Apps Script Web App URL', '#ef4444');
+    return;
+  }
+  sheetUrl = url;
+  localStorage.setItem('recon_sheet_url', url);
+  document.getElementById('setup_box').style.display = 'none';
+  toast('Connected! Syncing...', '#059669');
+  syncNow();
+}
+
+function skipSetup() {
+  document.getElementById('setup_box').style.display = 'none';
+  setSyncStatus('Local only — data saves on this device only', 'warn');
+  toast('Using local storage only', '#f59e0b');
+}
+
+function changeSheet() {
+  document.getElementById('setup_box').style.display = 'block';
+  document.getElementById('sheet_url_input').value = sheetUrl;
+}
+
+// ---- GOOGLE SHEETS SYNC ----
+async function syncNow() {
+  if (!sheetUrl) {
+    setSyncStatus('Not connected — click Setup to enable cross-device sync', 'warn');
+    return;
+  }
+  if (isSyncing) return;
+  isSyncing = true;
+  setSyncStatus('Syncing...', 'warn');
+
+  try {
+    var res = await fetch(sheetUrl + '?t=' + Date.now(), { method: 'GET' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    var remote = await res.json();
+
+    // Merge remote into local — remote keys are already YYYY-MM-DD from sheet
+    ['H','P15'].forEach(function(tab) {
+      if (remote[tab]) {
+        Object.keys(remote[tab]).forEach(function(k) {
+          // Only accept keys that match YYYY-MM-DD format (ignore corrupted keys)
+          if (/^\d{4}-\d{2}-\d{2}$/.test(k)) {
+            store[tab][k] = remote[tab][k];
+          }
+        });
+      }
     });
-    if(!res.ok) throw new Error('Invalid key or network error ('+res.status+')');
-    const data=await res.json();
-    BIN_ID=data.metadata.id;
-    localStorage.setItem('recon_jb_cfg',JSON.stringify({key,binId:BIN_ID}));
-    document.getElementById('setup_overlay').style.display='none';
-    showBanner('saved','✅ Connected! Bin ID: '+BIN_ID);
-    setStatus('✅ Cloud synced','#10b981');
+    persist();
     renderAll();
-  }catch(err){
-    showBanner('error','❌ '+err.message);
+    setSyncStatus('Synced \u2713 \u2014 ' + new Date().toLocaleTimeString(), 'ok');
+    toast('\u2713 Synced from shared sheet', '#059669');
+  } catch(e) {
+    setSyncStatus('Sync failed \u2014 check URL or network', 'err');
+    toast('Sync failed: ' + e.message, '#ef4444');
   }
+  isSyncing = false;
 }
 
-async function loadFromCloud(){
-  if(!BIN_ID||!API_KEY) return;
-  try{
-    const res=await fetch(`${JSONBIN_API}/${BIN_ID}/latest`,{
-      headers:{'X-Master-Key':API_KEY}
+async function pushToSheet(tab, dateKey, data) {
+  if (!sheetUrl) return;
+  try {
+    await fetch(sheetUrl, {
+      method: 'POST',
+      body: JSON.stringify({
+        tab: tab,
+        date: dateKey,
+        core: data.core,
+        inv_r: data.inv_r,
+        inv_d: data.inv_d
+      })
     });
-    if(!res.ok) throw new Error('Load failed: '+res.status);
-    const data=await res.json();
-    const record=data.record||{};
-    store.H  =record.H  ||{};
-    store.P15=record.P15||{};
-    setStatus('✅ Cloud synced','#10b981');
-  }catch(err){
-    setStatus('⚠ Load error','#f59e0b');
-    showBanner('error','Load error: '+err.message,4000);
-    // Fallback to localStorage
-    store.H  =JSON.parse(localStorage.getItem('recon_bk_H' )||'{}');
-    store.P15=JSON.parse(localStorage.getItem('recon_bk_P15')||'{}');
+    setSyncStatus('Saved to sheet \u2713 — ' + new Date().toLocaleTimeString(), 'ok');
+  } catch(e) {
+    setSyncStatus('Sheet push failed — saved locally', 'warn');
   }
 }
 
-async function saveToCloud(){
-  if(!BIN_ID||!API_KEY) return false;
-  const res=await fetch(`${JSONBIN_API}/${BIN_ID}`,{
-    method:'PUT',
-    headers:{'Content-Type':'application/json','X-Master-Key':API_KEY},
-    body:JSON.stringify({H:store.H,P15:store.P15})
+// ---- LOCAL STORAGE ----
+function persist() {
+  localStorage.setItem('recon_v3_H',  JSON.stringify(store.H));
+  localStorage.setItem('recon_v3_P15', JSON.stringify(store.P15));
+}
+
+// ---- CORE HELPERS ----
+function formatDate(d) {
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+function displayDate(s) {
+  if(!s) return '\u2014';
+  var p=s.split('-'); return p[2]+'/'+p[1]+'/'+p[0];
+}
+function calcUpTo(tab, date) {
+  if(!date) return {cumCore:0,cumR:0,cumD:0,avgR:0,avgD:0,avgCore:0};
+  var s=store[tab];
+  var keys=Object.keys(s).filter(function(k){return k<=date;}).sort();
+  var cc=0,cr=0,cd=0;
+  keys.forEach(function(k){cc+=s[k].core;cr+=s[k].inv_r;cd+=s[k].inv_d;});
+  var n=keys.length||1;
+  return {cumCore:cc,cumR:cr,cumD:cd,avgR:+(cr/n).toFixed(1),avgD:+(cd/n).toFixed(1),avgCore:+(cc/n).toFixed(1)};
+}
+function buildSeries(tab) {
+  var s=store[tab]; var keys=Object.keys(s).sort();
+  var labels=[],core=[],invR=[],invDisp=[],invCum=[],invAvg=[],coreAvg=[];
+  var cc=0,cr=0,cd=0;
+  keys.forEach(function(k,i){
+    var p=k.split('-'); labels.push(p[2]+'/'+p[1]);
+    cc+=s[k].core; cr+=s[k].inv_r; cd+=s[k].inv_d; var n=i+1;
+    core.push(s[k].core); invR.push(s[k].inv_r); invDisp.push(s[k].inv_d);
+    invCum.push(cr+cd); invAvg.push(+((cr+cd)/(2*n)).toFixed(1)); coreAvg.push(+(cc/n).toFixed(1));
   });
-  if(!res.ok) throw new Error('Save failed: '+res.status);
-  return true;
+  return {labels:labels,core:core,invR:invR,invDisp:invDisp,invCum:invCum,invAvg:invAvg,coreAvg:coreAvg};
 }
 
-function resetSetup(){
-  if(!confirm('API Key மாத்தணுமா? இந்த browser la setup reset ஆகும்.')) return;
-  localStorage.removeItem('recon_jb_cfg');
-  location.reload();
-}
-
-/* ══════════════════════════════════════════
-   BANNER & STATUS
-══════════════════════════════════════════ */
-let bannerTimer=null;
-function showBanner(type,msg,ms=2800){
-  const b=document.getElementById('sync_banner');
-  b.className=type; b.textContent=msg; b.style.display='block';
-  clearTimeout(bannerTimer);
-  bannerTimer=setTimeout(()=>{b.style.display='none';},ms);
-}
-function setStatus(txt,color){
-  const el=document.getElementById('db_status');
-  el.textContent=txt; el.style.color=color;
-}
-
-/* ══════════════════════════════════════════
-   SAVE A DAY
-══════════════════════════════════════════ */
-async function saveDay(){
-  if(!selectedDate) return;
-  const dateKey=selectedDate;
-  const core =parseInt(document.getElementById('inp_core').value)||0;
-  const inv_r=parseInt(document.getElementById('inp_inv_r').value)||0;
-  const inv_d=parseInt(document.getElementById('inp_inv_d').value)||0;
-  const old  =store[activeTab][dateKey]||{core:null,inv_r:null,inv_d:null};
-  const ts   =new Date().toISOString();
-  const changes=[];
-  if(old.core===null) changes.push(`New: Core=${core}, Rec=${inv_r}, Disp=${inv_d}`);
-  else{
-    if(old.core!==core)   changes.push(`Core: ${old.core}→${core}`);
-    if(old.inv_r!==inv_r) changes.push(`Rec: ${old.inv_r}→${inv_r}`);
-    if(old.inv_d!==inv_d) changes.push(`Disp: ${old.inv_d}→${inv_d}`);
-  }
-  const log=[...(old.log||[])];
-  if(changes.length>0) log.push({ts,changes});
-  store[activeTab][dateKey]={core,inv_r,inv_d,ts,log};
-
-  // Local backup always
-  localStorage.setItem('recon_bk_H',  JSON.stringify(store.H));
-  localStorage.setItem('recon_bk_P15',JSON.stringify(store.P15));
-
-  selectedDate='';
-  renderAll();
-
-  if(BIN_ID&&API_KEY){
-    showBanner('saving','⏳ Saving to cloud…',60000);
-    document.getElementById('btn_save').disabled=true;
-    try{
-      await saveToCloud();
-      showBanner('saved','✅ Saved! எல்லாரும் இப்போ பார்க்கலாம்.');
-      setStatus('✅ Cloud synced','#10b981');
-    }catch(err){
-      showBanner('error','⚠ Cloud save failed. Local backup ok. '+err.message,5000);
-      setStatus('⚠ Sync error','#ef4444');
-    }finally{
-      document.getElementById('btn_save').disabled=false;
-    }
-  }else{
-    showBanner('saving','📦 Saved locally (Setup பண்ணா cloud sync ஆகும்)',3000);
-  }
-}
-
-/* ══════════════════════════════════════════
-   UTILITIES
-══════════════════════════════════════════ */
-function formatDate(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
-function displayDate(s){if(!s)return '—';const p=s.split('-');return `${p[2]}/${p[1]}/${p[0]}`;}
-
-function calcUpTo(tab,date){
-  if(!date)return{cumCore:0,cumR:0,cumD:0,avgR:0,avgD:0,avgCore:0};
-  const s=store[tab],keys=Object.keys(s).filter(k=>k<=date).sort();
-  let cc=0,cr=0,cd=0;
-  keys.forEach(k=>{cc+=s[k].core;cr+=s[k].inv_r;cd+=s[k].inv_d;});
-  const n=keys.length||1;
-  return{cumCore:cc,cumR:cr,cumD:cd,avgR:+(cr/n).toFixed(1),avgD:+(cd/n).toFixed(1),avgCore:+(cc/n).toFixed(1)};
-}
-
-function buildSeries(tab){
-  const s=store[tab],keys=Object.keys(s).sort();
-  const labels=[],core=[],invR=[],invDisp=[],invCum=[],invAvg=[],coreAvg=[];
-  let cc=0,cr=0,cd=0;
-  keys.forEach((k,i)=>{
-    const p=k.split('-');labels.push(`${p[2]}/${p[1]}`);
-    cc+=s[k].core;cr+=s[k].inv_r;cd+=s[k].inv_d;const n=i+1;
-    core.push(s[k].core);invR.push(s[k].inv_r);invDisp.push(s[k].inv_d);
-    invCum.push(cr+cd);invAvg.push(+((cr+cd)/(2*n)).toFixed(1));coreAvg.push(+(cc/n).toFixed(1));
-  });
-  return{labels,core,invR,invDisp,invCum,invAvg,coreAvg};
-}
-
-const FIELDS=[
-  {key:'core',   label:'Core receipt',    color:'#2563eb'},
-  {key:'invDisp',label:'Inv dispatched',  color:'#10b981'},
-  {key:'coreCum',label:'Core cumulative', color:'#ef4444'},
-  {key:'invCum', label:'Inv cumulative',  color:'#f97316'},
-  {key:'invAvg', label:'Inv & disp avg',  color:'#eab308'},
-  {key:'coreAvg',label:'Core avg',        color:'#a855f7'},
-];
-
-/* ══════════════════════════════════════════
-   RENDER
-══════════════════════════════════════════ */
-function switchTab(t){
+// ---- TAB ----
+function switchTab(t) {
   activeTab=t; selectedDate='';
   document.getElementById('tab_H').className='tab-btn'+(t==='H'?' h-active':'');
   document.getElementById('tab_P15').className='tab-btn'+(t==='P15'?' p-active':'');
   renderAll();
 }
-function changeMonth(d){viewMonth+=d;if(viewMonth>11){viewMonth=0;viewYear++;}if(viewMonth<0){viewMonth=11;viewYear--;}renderAll();}
+function changeMonth(d) {
+  viewMonth+=d;
+  if(viewMonth>11){viewMonth=0;viewYear++;}
+  if(viewMonth<0){viewMonth=11;viewYear--;}
+  renderAll();
+}
 function goToday(){viewYear=today.getFullYear();viewMonth=today.getMonth();renderAll();}
 
-function renderCalendar(){
-  const s=store[activeTab];
-  document.getElementById('cal_title').textContent=`${MONTHS[viewMonth]} ${viewYear}`;
-  document.getElementById('report_subtitle').textContent=`${MONTHS[viewMonth]} ${viewYear} — Recon Engine`;
-  const grid=document.getElementById('cal_grid'); grid.innerHTML='';
-  ['Su','Mo','Tu','We','Th','Fr','Sa'].forEach(d=>{
-    const el=document.createElement('div');el.className='cal-day-name';el.textContent=d;grid.appendChild(el);
+// ---- SAVE ----
+async function saveDay() {
+  if(!selectedDate){toast('\u26a0 Select a date first!','#f59e0b');return;}
+  var btn=document.getElementById('save_btn');
+  btn.disabled=true; btn.textContent='\u23f3 Saving...';
+
+  var core  = parseInt(document.getElementById('inp_core').value)  || 0;
+  var inv_r = parseInt(document.getElementById('inp_inv_r').value) || 0;
+  var inv_d = parseInt(document.getElementById('inp_inv_d').value) || 0;
+
+  var old=store[activeTab][selectedDate]||{core:null,inv_r:null,inv_d:null,log:[]};
+  var ts=new Date().toISOString();
+  var changes=[];
+  if(old.core===null) changes.push('New: Core='+core+', Rec='+inv_r+', Disp='+inv_d);
+  else {
+    if(old.core!==core)   changes.push('Core: '+old.core+' \u2192 '+core);
+    if(old.inv_r!==inv_r) changes.push('Rec: '+old.inv_r+' \u2192 '+inv_r);
+    if(old.inv_d!==inv_d) changes.push('Disp: '+old.inv_d+' \u2192 '+inv_d);
+  }
+  if(changes.length===0){toast('\u2139 No changes','#64748b');btn.disabled=false;btn.textContent='\ud83d\udcbe Save';return;}
+
+  var log=(old.log||[]).slice();
+  log.unshift({ts:ts,changes:changes});
+  store[activeTab][selectedDate]={core:core,inv_r:inv_r,inv_d:inv_d,ts:ts,log:log};
+  persist();
+
+  // Push to Google Sheet (async, non-blocking)
+  await pushToSheet(activeTab, selectedDate, {core:core,inv_r:inv_r,inv_d:inv_d});
+
+  toast('\u2713 Saved!','#059669');
+  btn.disabled=false; btn.textContent='\ud83d\udcbe Save';
+  selectedDate='';
+  renderAll();
+}
+
+// ---- RENDER CALENDAR ----
+function renderCalendar() {
+  var s=store[activeTab];
+  document.getElementById('cal_title').textContent=MONTHS[viewMonth]+' '+viewYear;
+  document.getElementById('report_subtitle').textContent=MONTHS[viewMonth]+' '+viewYear+' \u2014 Recon Engine';
+  var grid=document.getElementById('cal_grid'); grid.innerHTML='';
+  ['Su','Mo','Tu','We','Th','Fr','Sa'].forEach(function(d){
+    var el=document.createElement('div');el.className='cal-day-name';el.textContent=d;grid.appendChild(el);
   });
-  const first=new Date(viewYear,viewMonth,1).getDay();
-  const days=new Date(viewYear,viewMonth+1,0).getDate();
-  for(let i=0;i<first;i++){const el=document.createElement('div');el.className='cal-day empty';grid.appendChild(el);}
-  for(let d=1;d<=days;d++){
-    const ds=`${viewYear}-${String(viewMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    const el=document.createElement('div');el.className='cal-day';el.textContent=d;
-    if(s[ds])el.classList.add('has-data');
-    if(ds===formatDate(today)&&ds!==selectedDate)el.classList.add('today');
-    if(ds===selectedDate)el.classList.add('selected');
-    el.onclick=()=>{selectedDate=(selectedDate===ds)?'':ds;renderAll();};
+  var first=new Date(viewYear,viewMonth,1).getDay();
+  var days=new Date(viewYear,viewMonth+1,0).getDate();
+  for(var i=0;i<first;i++){var el=document.createElement('div');el.className='cal-day empty';grid.appendChild(el);}
+  for(var d=1;d<=days;d++){
+    var ds=viewYear+'-'+String(viewMonth+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
+    var el=document.createElement('div'); el.className='cal-day'; el.textContent=d;
+    if(s[ds]) el.classList.add('has-data');
+    if(ds===formatDate(today)&&ds!==selectedDate) el.classList.add('today');
+    if(ds===selectedDate) el.classList.add('selected');
+    (function(dateStr){el.onclick=function(){selectedDate=(selectedDate===dateStr)?'':dateStr;renderAll();};})(ds);
     grid.appendChild(el);
   }
 }
 
-function renderDaySummary(){
-  const dateKey=selectedDate||formatDate(today);
+// ---- RENDER DAY SUMMARY ----
+function renderDaySummary() {
+  var dateKey=selectedDate||formatDate(today);
   document.getElementById('summary_date_badge').textContent=displayDate(dateKey);
-  const box=document.getElementById('day_summary_box');
-  const ex=store[activeTab][dateKey];
-  if(!ex){box.innerHTML=`<div style="color:#94a3b8;font-size:10px;text-align:center;padding:20px;">📅 ${displayDate(dateKey)}<br>No data yet</div>`;return;}
-  const c=calcUpTo(activeTab,dateKey);
-  const rows=[
-    {label:'Core Receipt',  val:ex.core,               color:'#2563eb'},
-    {label:'Inv Rec / Disp',val:`${ex.inv_r} / ${ex.inv_d}`,color:'#10b981'},
-    {label:'Core Cumulative',val:c.cumCore,             color:'#ef4444'},
-    {label:'Inv Cumulative', val:`${c.cumR} / ${c.cumD}`,color:'#f97316'},
-    {label:'Inv & Disp Avg', val:`${c.avgR} / ${c.avgD}`,color:'#eab308'},
-    {label:'Core Avg',       val:c.avgCore,             color:'#a855f7'},
+  var box=document.getElementById('day_summary_box');
+  var ex=store[activeTab][dateKey];
+  if(!ex){box.innerHTML='<div style="color:#94a3b8;font-size:10px;text-align:center;padding:20px;font-weight:700;">\ud83d\udcc5 '+displayDate(dateKey)+'<br>No data yet</div>';return;}
+  var c=calcUpTo(activeTab,dateKey);
+  var rows=[
+    {label:'Core Receipt',     val:ex.core,              color:'#2563eb'},
+    {label:'Inv Rec / Disp',   val:ex.inv_r+' / '+ex.inv_d, color:'#10b981'},
+    {label:'Core Cumulative',  val:c.cumCore,            color:'#ef4444'},
+    {label:'Inv Cumulative',   val:c.cumR+' / '+c.cumD, color:'#f97316'},
+    {label:'Inv &amp; Disp Avg',   val:c.avgR+' / '+c.avgD, color:'#eab308'},
+    {label:'Core Avg',         val:c.avgCore,            color:'#a855f7'}
   ];
-  box.innerHTML=rows.map(r=>`<div class="s-row"><div class="s-label"><div class="s-dot" style="background:${r.color}"></div>${r.label}</div><div class="s-val" style="color:${r.color}">${r.val}</div></div>`).join('');
+  box.innerHTML=rows.map(function(r){
+    return '<div class="s-row"><div class="s-label"><div class="s-dot" style="background:'+r.color+'"></div>'+r.label+'</div><div class="s-val" style="color:'+r.color+'">'+r.val+'</div></div>';
+  }).join('');
 }
 
-function renderEntryForm(){
-  const ex=selectedDate?store[activeTab][selectedDate]:null;
-  document.getElementById('entry_title').textContent=selectedDate?`📅 ${displayDate(selectedDate)}`:'—';
+// ---- RENDER ENTRY FORM ----
+function renderEntryForm() {
+  var ex=selectedDate?store[activeTab][selectedDate]:null;
+  document.getElementById('entry_title').textContent=selectedDate?'\ud83d\udcc5 '+displayDate(selectedDate):'\u2014';
   document.getElementById('inp_core').value=ex?ex.core:'';
   document.getElementById('inp_inv_r').value=ex?ex.inv_r:'';
   document.getElementById('inp_inv_d').value=ex?ex.inv_d:'';
-  if(ex&&ex.log&&ex.log.length>0){
-    let html=`<div class="changelog"><div class="cl-title">📋 CHANGE LOG</div>`;
-    [...ex.log].reverse().forEach(l=>{
-      const ld=new Date(l.ts);
-      html+=`<div style="margin-bottom:4px"><div class="cl-time">🕐 ${ld.toLocaleDateString('en-GB')} ${ld.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})}</div>`;
-      l.changes.forEach(ch=>{html+=`<div class="cl-change" style="color:${ch.startsWith('New')?'#10b981':'#374151'}">• ${ch}</div>`;});
-      html+=`</div>`;
+  var mi=document.getElementById('modified_info');
+  if(ex&&ex.log&&ex.log.length){
+    var html='<div class="changelog"><div class="cl-title">\ud83d\udccb CHANGE LOG</div>';
+    ex.log.slice(0,4).forEach(function(l){
+      var ld=new Date(l.ts);
+      html+='<div><div class="cl-time">\ud83d\udd50 '+ld.toLocaleDateString()+' '+ld.toLocaleTimeString()+'</div>';
+      l.changes.forEach(function(ch){html+='<div class="cl-change">\u2022 '+ch+'</div>';});
+      html+='</div>';
     });
-    html+=`</div>`;
-    document.getElementById('modified_info').innerHTML=html;
-  }else document.getElementById('modified_info').innerHTML='';
+    html+='</div>';
+    mi.innerHTML=html;
+  } else mi.innerHTML='<div class="changelog" style="color:#94a3b8;font-size:9px;font-weight:700;">No previous logs</div>';
 }
 
-function renderLegend(){
-  const date=selectedDate||formatDate(today);
-  const ex=store[activeTab][date]||{core:0,inv_r:0,inv_d:0};
-  const c=calcUpTo(activeTab,date);
-  const values={core:ex.core,invDisp:ex.inv_d,coreCum:c.cumCore,invCum:c.cumR,invAvg:c.avgR,coreAvg:c.avgCore};
+// ---- RENDER LEGEND ----
+function renderLegend() {
+  var date=selectedDate||formatDate(today);
+  var ex=store[activeTab][date]||{core:0,inv_r:0,inv_d:0};
+  var c=calcUpTo(activeTab,date);
   document.getElementById('legend_day_label').textContent=displayDate(date);
-  document.getElementById('legend_box').innerHTML=FIELDS.map(f=>`
-    <div class="legend-item">
-      <div class="leg-dot" style="background:${f.color}"></div>
-      <span class="leg-label">${f.label}</span>
-      <span class="leg-val" style="color:${f.color}">${values[f.key]}</span>
-    </div>`).join('');
+  var fields=[
+    {label:'Core receipt',    color:'#2563eb',val:ex.core},
+    {label:'Inv dispatched',  color:'#10b981',val:ex.inv_d},
+    {label:'Core cumulative', color:'#ef4444',val:c.cumCore},
+    {label:'Inv cumulative',  color:'#f97316',val:c.cumR},
+    {label:'Inv & disp avg',  color:'#eab308',val:c.avgR},
+    {label:'Core avg',        color:'#a855f7',val:c.avgCore}
+  ];
+  document.getElementById('legend_box').innerHTML=fields.map(function(f){
+    return '<div class="legend-item"><div class="leg-dot" style="background:'+f.color+'"></div><span class="leg-label">'+f.label+'</span><span class="leg-val" style="color:'+f.color+'">'+f.val+'</span></div>';
+  }).join('');
 }
 
-const charts={};
-const CHART_OPTS={responsive:true,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#94a3b8',font:{size:7}},grid:{color:'#f1f5f9'}},y:{ticks:{color:'#94a3b8',font:{size:7}},grid:{color:'#f1f5f9'},beginAtZero:true}}};
-function makeChart(id,labels,data,color,type='line'){
+// ---- CHARTS ----
+var charts={};
+function makeChart(id,labels,data,color,type){
+  type=type||'line';
+  var canvas=document.getElementById(id); if(!canvas)return;
   if(charts[id])charts[id].destroy();
-  charts[id]=new Chart(document.getElementById(id),{type,data:{labels,datasets:[{data,borderColor:color,backgroundColor:color+'33',pointRadius:2,pointBackgroundColor:color,tension:0.4,fill:true,borderWidth:1.5,borderRadius:type==='bar'?3:0}]},options:{...CHART_OPTS,maintainAspectRatio:false}});
+  charts[id]=new Chart(canvas,{
+    type:type,
+    data:{labels:labels,datasets:[{data:data,borderColor:color,backgroundColor:color+'33',pointRadius:2,pointBackgroundColor:color,tension:0.4,fill:true,borderWidth:1.5}]},
+    options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{x:{ticks:{font:{size:7},color:'#94a3b8'}},y:{beginAtZero:true,ticks:{font:{size:7},color:'#94a3b8'}}}}
+  });
 }
-
 function renderTrends(){
-  const s=buildSeries(activeTab),sH=buildSeries('H'),sP=buildSeries('P15');
-  makeChart('bar_chart',s.labels,s.core,'#2563eb','line');
+  var s=buildSeries(activeTab),sH=buildSeries('H'),sP=buildSeries('P15');
+  makeChart('bar_chart',s.labels,s.core,'#2563eb');
   makeChart('line_chart',s.labels,s.invDisp,'#10b981');
   makeChart('invr_chart',s.labels,s.invR,'#f97316');
   makeChart('h_cum_chart',sH.labels,sH.invCum,'#f97316');
@@ -550,35 +601,42 @@ function renderTrends(){
   makeChart('p_coreavg_chart',sP.labels,sP.coreAvg,'#a855f7');
 }
 
+// ---- MONTHLY TABLE ----
 function renderMonthly(){
-  const s=store[activeTab],monthly={};
-  Object.keys(s).sort().forEach(k=>{const ym=k.substring(0,7);if(!monthly[ym])monthly[ym]={core:0,inv_r:0,inv_d:0,days:0};monthly[ym].core+=s[k].core;monthly[ym].inv_r+=s[k].inv_r;monthly[ym].inv_d+=s[k].inv_d;monthly[ym].days++;});
-  const keys=Object.keys(monthly).sort();
-  if(!keys.length){document.getElementById('monthly_table').innerHTML='<tr><td style="color:#94a3b8;padding:8px">No data yet</td></tr>';return;}
-  let html=`<thead><tr><th>Month</th><th>Days</th><th>Core</th><th>Rec</th><th>Disp</th><th>C.Avg</th><th>I.Avg</th></tr></thead><tbody>`;
-  keys.forEach(ym=>{const m=monthly[ym];const[y,mo]=ym.split('-');html+=`<tr><td style="color:#1a1a2e;font-weight:700">${MONTHS_SHORT[parseInt(mo)-1]} ${y}</td><td style="color:#2563eb">${m.days}</td><td style="color:#10b981">${m.core}</td><td style="color:#f97316">${m.inv_r}</td><td style="color:#eab308">${m.inv_d}</td><td style="color:#a855f7">${(m.core/m.days).toFixed(1)}</td><td style="color:#ef4444">${((m.inv_r+m.inv_d)/2/m.days).toFixed(1)}</td></tr>`;});
+  var s=store[activeTab],monthly={};
+  Object.keys(s).sort().forEach(function(k){
+    var ym=k.substring(0,7);
+    if(!monthly[ym])monthly[ym]={core:0,inv_r:0,inv_d:0,days:0};
+    monthly[ym].core+=s[k].core;monthly[ym].inv_r+=s[k].inv_r;monthly[ym].inv_d+=s[k].inv_d;monthly[ym].days++;
+  });
+  var keys=Object.keys(monthly).sort();
+  var html='<thead><tr><th>Month</th><th>Days</th><th>Core</th><th>Rec</th><th>Disp</th><th>C.Avg</th><th>I.Avg</th></tr></thead><tbody>';
+  if(!keys.length){html+='<tr><td colspan="7" style="color:#94a3b8;text-align:center;padding:16px;font-weight:700;">No data yet</td></tr>';}
+  else{keys.forEach(function(ym){var m=monthly[ym];var pts=ym.split('-');html+='<tr><td style="color:#1a1a2e;font-weight:800">'+MONTHS_SHORT[parseInt(pts[1])-1]+' '+pts[0]+'</td><td style="color:#2563eb">'+m.days+'</td><td style="color:#10b981">'+m.core+'</td><td style="color:#f97316">'+m.inv_r+'</td><td style="color:#eab308">'+m.inv_d+'</td><td style="color:#a855f7">'+(m.core/m.days).toFixed(1)+'</td><td style="color:#ef4444">'+((m.inv_r+m.inv_d)/2/m.days).toFixed(1)+'</td></tr>';});}
   document.getElementById('monthly_table').innerHTML=html+'</tbody>';
 }
 
+// ---- SHARE ----
 function buildMessage(){
-  const date=selectedDate||formatDate(today),dStr=displayDate(date);
-  const sH=store['H'][date]||{core:0,inv_r:0,inv_d:0},cH=calcUpTo('H',date);
-  const sP=store['P15'][date]||{core:0,inv_r:0,inv_d:0},cP=calcUpTo('P15',date);
-  return `${dStr} Recon Core Receipt, Invoice Received & Dispatched :\n_ _ _ _ _ _ _ _ _ _ _ _\nH - Recon Engine\nCore Receipt : ${String(sH.core).padStart(2,'0')}\nInvoice Received & Dispatched : ${sH.inv_r}/${sH.inv_d}\nCore Receipt Cumulative : ${String(cH.cumCore).padStart(2,'0')}\nInvoice & Dispatch Cumulative : ${cH.cumR}\nInvoice & Dispatch Average : ${cH.avgR}\nCore Average Receipt : ${cH.avgCore}\n_ _ _ _ _ _ _ _ _ _ _ _\nP15 - Recon Engine\nCore Receipt : ${String(sP.core).padStart(2,'0')}\nInvoice Received & Dispatched : ${sP.inv_r}/${sP.inv_d}\nCore Receipt Cumulative : ${String(cP.cumCore).padStart(2,'0')}\nInvoice & Dispatch Cumulative : ${cP.cumR}\nInvoice & Dispatch Average : ${cP.avgR}\nCore Average Receipt : ${cP.avgCore}\n_ _ _ _ _ _ _ _ _ _ _ _\nWarm Regards!!`;
+  var date=selectedDate||formatDate(today);
+  var dStr=displayDate(date);
+  var sH=store['H'][date]||{core:0,inv_r:0,inv_d:0}; var cH=calcUpTo('H',date);
+  var sP=store['P15'][date]||{core:0,inv_r:0,inv_d:0}; var cP=calcUpTo('P15',date);
+  return dStr+' Recon Core Receipt, Invoice Received & Dispatched :\n_ _ _ _ _ _ _ _ _ _ _ _\nH - Recon Engine\nCore Receipt : '+String(sH.core).padStart(2,'0')+'\nInvoice Received & Dispatched : '+sH.inv_r+'/'+sH.inv_d+'\nCore Receipt Cumulative : '+String(cH.cumCore).padStart(2,'0')+'\nInvoice & Dispatch Cumulative : '+cH.cumR+'\nInvoice & Dispatch Average : '+cH.avgR+'\nCore Average Receipt : '+cH.avgCore+'\n_ _ _ _ _ _ _ _ _ _ _ _\nP15 - Recon Engine\nCore Receipt : '+String(sP.core).padStart(2,'0')+'\nInvoice Received & Dispatched : '+sP.inv_r+'/'+sP.inv_d+'\nCore Receipt Cumulative : '+String(cP.cumCore).padStart(2,'0')+'\nInvoice & Dispatch Cumulative : '+cP.cumR+'\nInvoice & Dispatch Average : '+cP.avgR+'\nCore Average Receipt : '+cP.avgCore+'\n_ _ _ _ _ _ _ _ _ _ _ _\nWarm Regards!!';
 }
 function renderShare(){document.getElementById('share_preview').textContent=buildMessage();}
-function shareWA(){window.open(`https://wa.me/?text=${encodeURIComponent(buildMessage())}`,'_blank');}
-function shareEmail(){window.open(`mailto:?subject=${encodeURIComponent(`Recon Engine Report — ${displayDate(selectedDate||formatDate(today))}`)}&body=${encodeURIComponent(buildMessage())}`,'_blank');}
+function shareWA(){window.open('https://wa.me/?text='+encodeURIComponent(buildMessage()),'_blank');}
+function shareEmail(){window.open('mailto:?subject='+encodeURIComponent('Recon Report \u2014 '+displayDate(selectedDate||formatDate(today)))+'&body='+encodeURIComponent(buildMessage()),'_blank');}
 
+// ---- ALL DATA MODAL ----
 function openAllData(){
-  let html='';
-  ['H','P15'].forEach(tab=>{
-    const s=store[tab],keys=Object.keys(s).sort();
-    html+=`<div class="modal-section">${tab} Recon — ${keys.length} records</div>`;
-    if(!keys.length){html+='<p style="color:#94a3b8;font-size:11px;padding:4px 0">No data</p>';return;}
-    html+=`<table class="modal-table"><thead><tr><th>Date</th><th>Core</th><th>Inv Rec</th><th>Inv Disp</th><th>Saved At</th></tr></thead><tbody>`;
-    keys.forEach(k=>{const r=s[k],d=new Date(r.ts);html+=`<tr><td style="font-weight:700;color:#1a1a2e">${displayDate(k)}</td><td style="color:#2563eb">${r.core}</td><td style="color:#f97316">${r.inv_r}</td><td style="color:#10b981">${r.inv_d}</td><td style="color:#94a3b8;font-size:9px">${d.toLocaleDateString('en-GB')} ${d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})}</td></tr>`;});
-    html+=`</tbody></table>`;
+  var html='';
+  ['H','P15'].forEach(function(tab){
+    var s=store[tab];var keys=Object.keys(s).sort();
+    html+='<div class="modal-section">'+tab+' Recon \u2014 '+keys.length+' records</div><table class="modal-table"><thead><tr><th>Date</th><th>Core</th><th>Inv Rec</th><th>Inv Disp</th><th>Saved At</th></tr></thead><tbody>';
+    if(!keys.length){html+='<tr><td colspan="5" style="color:#94a3b8;text-align:center;padding:12px;font-weight:700;">No data</td></tr>';}
+    else{keys.forEach(function(k){var r=s[k];var d=new Date(r.ts);html+='<tr><td style="font-weight:800;color:#1a1a2e">'+displayDate(k)+'</td><td style="color:#2563eb">'+r.core+'</td><td style="color:#f97316">'+r.inv_r+'</td><td style="color:#10b981">'+r.inv_d+'</td><td style="color:#94a3b8;font-size:9px">'+d.toLocaleString()+'</td></tr>';});}
+    html+='</tbody></table>';
   });
   document.getElementById('modal_body').innerHTML=html;
   document.getElementById('modal_overlay').classList.add('show');
@@ -586,57 +644,43 @@ function openAllData(){
 function closeModal(){document.getElementById('modal_overlay').classList.remove('show');}
 function closeModalOutside(e){if(e.target===document.getElementById('modal_overlay'))closeModal();}
 
-function exportExcel(){
-  function buildSheet(tab){
-    const s=store[tab],keys=Object.keys(s).sort();
-    const rows=[['Date','Core Receipt','Inv Received','Inv Dispatched','Core Cumulative','Inv Cumulative','Inv & Disp Avg','Core Avg']];
-    let cc=0,cr=0,cd=0;
-    keys.forEach((k,i)=>{
-      const r=s[k];cc+=r.core;cr+=r.inv_r;cd+=r.inv_d;const n=i+1;
-      const p=k.split('-');
-      rows.push([`${p[2]}/${p[1]}/${p[0]}`,r.core,r.inv_r,r.inv_d,cc,cr+cd,+((cr+cd)/(2*n)).toFixed(1),+(cc/n).toFixed(1)]);
-    });
+// ---- EXCEL EXPORT ----
+function exportExcelInfo(){
+  function buildSheetData(tab){
+    var s=store[tab];var keys=Object.keys(s).sort();
+    var rows=[['Date','Core Receipt','Inv Received','Inv Dispatched','Core Cumulative','Inv Cumulative','Inv & Disp Avg','Core Avg']];
+    var cc=0,cr=0,cd=0;
+    keys.forEach(function(k,i){var r=s[k];cc+=r.core;cr+=r.inv_r;cd+=r.inv_d;var n=i+1;rows.push([displayDate(k),r.core,r.inv_r,r.inv_d,cc,cr+cd,+((cr+cd)/(2*n)).toFixed(1),+(cc/n).toFixed(1)]);});
     return rows;
   }
-  const wb=XLSX.utils.book_new();
-  const wsH=XLSX.utils.aoa_to_sheet(buildSheet('H'));
-  const wsP=XLSX.utils.aoa_to_sheet(buildSheet('P15'));
-  const wscols=[{wch:12},{wch:14},{wch:14},{wch:16},{wch:18},{wch:16},{wch:16},{wch:16}];
+  var wb=XLSX.utils.book_new();
+  var wsH=XLSX.utils.aoa_to_sheet(buildSheetData('H'));
+  var wsP=XLSX.utils.aoa_to_sheet(buildSheetData('P15'));
+  var wscols=[{wch:12},{wch:14},{wch:14},{wch:16},{wch:18},{wch:16},{wch:16},{wch:18}];
   wsH['!cols']=wscols;wsP['!cols']=wscols;
   XLSX.utils.book_append_sheet(wb,wsH,'H Recon');
   XLSX.utils.book_append_sheet(wb,wsP,'P15 Recon');
   XLSX.writeFile(wb,'Recon_Engine_Report.xlsx');
 }
 
+// ---- MASTER RENDER ----
 function renderAll(){
   renderCalendar();renderDaySummary();renderEntryForm();
   renderLegend();renderTrends();renderMonthly();renderShare();
 }
 
-/* ══════════════════════════════════════════
-   BOOT
-══════════════════════════════════════════ */
-(async function boot(){
-  const cfg=getConfig();
-  if(cfg){
-    API_KEY=cfg.key; BIN_ID=cfg.binId;
-    setStatus('⏳ Loading from cloud…','#94a3b8');
-    renderAll(); // show UI immediately
-    await loadFromCloud();
-    renderAll(); // re-render with cloud data
-    // Auto-refresh every 60 seconds so teammates' changes appear
-    setInterval(async()=>{
-      await loadFromCloud();
-      renderAll();
-    },60000);
-  }else{
-    // No config — load local backup if any, then show setup
-    store.H  =JSON.parse(localStorage.getItem('recon_bk_H' )||'{}');
-    store.P15=JSON.parse(localStorage.getItem('recon_bk_P15')||'{}');
-    setStatus('⚠ Setup needed','#f59e0b');
-    renderAll();
-    document.getElementById('setup_overlay').style.display='flex';
+// ---- INIT ----
+(function init(){
+  // Hide setup box if sheet already configured
+  if(sheetUrl){
+    document.getElementById('setup_box').style.display='none';
+    syncNow();
+  } else {
+    setSyncStatus('Not configured \u2014 see setup above to enable cross-device sync','warn');
   }
+  renderAll();
+  // Auto-sync every 60 seconds
+  setInterval(function(){ if(sheetUrl) syncNow(); }, 60000);
 })();
 </script>
 </body>
